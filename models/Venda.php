@@ -1,35 +1,25 @@
 <?php
-require "Usuario.php";
+require "models\Usuario.php";
 
 class Venda {
     private $id;
-    private $dtHora;
+    private $dt_hora;
     private $usuario;
 
-    public function __construct($id, $dtHora, Usuario $usuario){
+    public function __construct($id, $dt_hora, Usuario $usuario){
         $this->id = $id;
-        $this->dtHora = $dtHora;
-        $this->usuario = $usuario;
+        $this->dt_hora = $dt_hora;
+        $this->usuario;
     }
    
-    public function getDtHora()
+    public function getNome()
     {
-        return $this->dtHora;
+        return $this->dt_hora;
     }
 
-    public function setDtHora($dtHora)
+    public function setNome($dt_hora)
     {
-        $this->dtHora = $dtHora;
-        return $this;
-    }
-    public function getUsuario()
-    {
-        return $this->usuario;
-    }
-
-    public function setUsuario(Usuario $usuario)
-    {
-        $this->usuario = $usuario;
+        $this->dt_hora = $dt_hora;
         return $this;
     }
 
@@ -50,6 +40,26 @@ class Venda {
     public function setId($id)
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of usuario
+     */ 
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
+
+    /**
+     * Set the value of usuario
+     *
+     * @return  self
+     */ 
+    public function setUsuario(Usuario $usuario)
+    {
+        $this->usuario = $usuario;
 
         return $this;
     }

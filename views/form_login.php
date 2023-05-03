@@ -2,7 +2,7 @@
     // Inicia a sessão
     session_start();
     
-    if(isset($_POST["usuario"]) && isset($_POST["senha"])){
+    if(isset($_POST["usuario"])){
         $_SESSION["usuario"] = $_POST["usuario"];
         header("Location: ../index.php");
     }

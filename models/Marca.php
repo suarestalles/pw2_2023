@@ -4,7 +4,7 @@ class Marca {
     private $id;
     private $nome;
 
-    public function __construct($id, $nome, $valor, $descricao, $imagem){
+    public function __construct($id, $nome){
         $this->id = $id;
         $this->nome = $nome;
     }

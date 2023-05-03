@@ -1,6 +1,5 @@
 <?php
-    require "models\Produto.php";
-    require "controllers\ProdutoController.php";
+    require "/controllers/ProdutoController.php";
 
     $produto = null;
 
@@ -40,9 +39,6 @@
                     <div class="card">
                         <div class="card">
                         <div class="row g-0">
-                            <div class="col-md-4">
-                                <img src=<?php echo $produto->getImagem(); ?> alt="Imagem do produto" class="img-fluid">
-                            </div>
                             <div class="col-md-8 d-flex flex-column">
                                 <div class="card-body">
                                     <h5 class="card-title"><?php echo $produto->getNome(); ?></h5>
