@@ -32,10 +32,10 @@
 
     <!-- Se existe, então eu faço o include dela no index -->
     <?php
-        if ($pg == "" or !file_exists("views\\". $pg . ".php")) {
+        if ($pg == "" or !file_exists("views/". $pg . ".php")) {
             echo "Página não encontrada...";
         } else {
-            include "views\\".$pg . ".php";
+            include "views/".$pg . ".php";
         }
     ?>
     

@@ -9,18 +9,18 @@
 
 ?>
 
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário de Login</title>
+    <title>Formulário de Login</title> -->
     <!-- Área para os Scripts CSS -->
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!--<link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">-->
     <!-- Título da Página -->
-</head>
+<!--</head>
 <body>
 	<div class="container">
 		<div class="row justify-content-center mt-5">
@@ -38,11 +38,33 @@
 				</form>
 			</div>
 		</div>
-	</div>
+	</div>-->
 	
 	<!-- Área para os Scripts Java Scripts -->
-    <script src="js/jquery.min.js"></script>
+    <!--<script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/scripts.js"></script>
+</body>
+</html>-->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <link rel="stylesheet" href="../login/css/style.css">
+</head>
+<body>
+    <div class="formulario">
+        <form action="#" method="POST">
+            <h1>LOGIN</h1>
+            <input type="text" name="usuario" id="user" placeholder="Usuário/E-Mail" required>
+            <input type="password" name="senha" id="pass" placeholder="Senha" required>
+            <input type="submit" value="Login">
+        </form>
+    </div>
 </body>
 </html>
