@@ -16,6 +16,21 @@ class MarcaController {
         return $marcas;
     }
     public function save(Marca $marca){
+        try {
+            $conexao = Conexao::getInstance();
+
+            $stmt = $conexao->prepare("INSERT INTO marca (nome) VALUE (:nome)");
+
+            $stmt->bindParam(":nome", $marca->getNome());
+
+            $stmt->execute();
+
+            $marca->setId($conexao->lastInsertId());
+
+            return $marca;
+        } catch(PDOException $e) {
+            echo "Erro ao inserir a marca: " . $e->getMessage();
+        }
     }
     public function update(Marca $marca){
     }

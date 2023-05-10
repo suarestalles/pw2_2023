@@ -2,10 +2,10 @@
 
 class Conexao {
     private static $conexao = null;
-    private static $host = "";
-    private static $usuario = "";
-    private static $senha = "";
-    private static $banco = "";
+    private static $host = "10.5.10.10";
+    private static $usuario = "desenv";
+    private static $senha = "123456";
+    private static $banco = "pw2_2023_talles";
 
     private function __construct() {}
 

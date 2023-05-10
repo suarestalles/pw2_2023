@@ -16,10 +16,38 @@ class CategoriaController {
         return $categorias;
     }
     public function save(Categoria $categoria){
+        try {
+            $conexao = Conexao::getInstance();
+
+            $stmt = $conexao->prepare("INSERT INTO categoria (nome) VALUE (:nome)");
+
+            $stmt->bindParam(":nome", $categoria->getNome());
+
+            $stmt->execute();
+
+            $categoria->setId($conexao->lastInsertId());
+
+            return $categoria;
+        } catch(PDOException $e) {
+            echo "Erro ao inserir a categoria: " . $e->getMessage();
+        }
     }
     public function update(Categoria $categoria){
     }
     public function delete(Categoria $categoria){
+        try {
+            $conexao = Conexao::getInstance();
+
+            $stmt = $conexao->prepare("DELETE FROM categoria WHERE id = :id");
+
+            $stmt->bindParam(":id", $categoria->getId());
+
+            $stmt->execute();
+
+            return $categoria;
+        } catch(PDOException $e) {
+            echo "Erro ao excluir a categoria: " . $e->getMessage();
+        }
     }
     public function findById($id){
         try {

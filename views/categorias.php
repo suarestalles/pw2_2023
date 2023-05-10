@@ -8,6 +8,7 @@
         <div class="col">
             <h1 class="text-center mb-5">Lista de Categorias</h1>
             <table class="table">
+                <a href="?pg=cadastroCategoria" class="btn btn-success text-end">Cadastrar</a>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -22,6 +23,8 @@
                             <td><?php echo htmlspecialchars($categoria->getNome()); ?></td>
                             <td class="text-end">
                                 <a href="" class="btn btn-primary text-end">Detalhes</a>
+                                <a href="" class="btn btn-warning text-end">Editar</a>
+                                <a href="" class="btn btn-danger text-end">Excluir</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
