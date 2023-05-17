@@ -1,8 +1,9 @@
 <?php
-require "models\Produto.php";
-require "models\Venda.php";
+require_once "models\Produto.php";
+require_once "models\Venda.php";
 
-class ProdutoVenda {
+class ProdutoVenda
+{
     private $id;
 
     private $qtde;
@@ -29,7 +30,7 @@ class ProdutoVenda {
 
     /**
      * Get the value of id
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -39,7 +40,7 @@ class ProdutoVenda {
      * Set the value of id
      *
      * @return  self
-     */ 
+     */
     public function setId($id)
     {
         $this->id = $id;
@@ -49,7 +50,7 @@ class ProdutoVenda {
 
     /**
      * Get the value of produto
-     */ 
+     */
     public function getProduto()
     {
         return $this->produto;
@@ -59,7 +60,7 @@ class ProdutoVenda {
      * Set the value of produto
      *
      * @return  self
-     */ 
+     */
     public function setProduto(Produto $produto)
     {
         $this->produto = $produto;
@@ -69,7 +70,7 @@ class ProdutoVenda {
 
     /**
      * Get the value of venda
-     */ 
+     */
     public function getVenda()
     {
         return $this->venda;
@@ -79,7 +80,7 @@ class ProdutoVenda {
      * Set the value of venda
      *
      * @return  self
-     */ 
+     */
     public function setVenda(Venda $venda)
     {
         $this->venda = $venda;
@@ -89,7 +90,7 @@ class ProdutoVenda {
 
     /**
      * Get the value of valor_unitario
-     */ 
+     */
     public function getPrecoUnitario()
     {
         return $this->valor_unitario;
@@ -99,7 +100,7 @@ class ProdutoVenda {
      * Set the value of valor_unitario
      *
      * @return  self
-     */ 
+     */
     public function setPrecoUnitario($valor_unitario)
     {
         $this->valor_unitario = $valor_unitario;
@@ -109,7 +110,7 @@ class ProdutoVenda {
 
     /**
      * Get the value of qtde
-     */ 
+     */
     public function getQtde()
     {
         return $this->qtde;
@@ -119,7 +120,7 @@ class ProdutoVenda {
      * Set the value of qtde
      *
      * @return  self
-     */ 
+     */
     public function setQtde($qtde)
     {
         $this->qtde = $qtde;
@@ -129,7 +130,7 @@ class ProdutoVenda {
 
     /**
      * Get the value of valor_total
-     */ 
+     */
     public function getValorTotal()
     {
         return $this->valor_total;
@@ -139,7 +140,7 @@ class ProdutoVenda {
      * Set the value of valor_total
      *
      * @return  self
-     */ 
+     */
     public function setValorTotal($valor_total)
     {
         $this->valor_total = $valor_total;
@@ -147,4 +148,3 @@ class ProdutoVenda {
         return $this;
     }
 }
-

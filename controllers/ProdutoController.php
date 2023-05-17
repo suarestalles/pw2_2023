@@ -1,11 +1,13 @@
 <?php
-require "models/Produto.php";
-require "models/Conexao.php";
-require "CategoriaController.php";
-require "MarcaController.php";
-class ProdutoController {
-    public function findAll(){
-        
+require_once "models/Conexao.php";
+require_once "controllers/CategoriaController.php";
+require_once "controllers/MarcaController.php";
+require_once "models/Produto.php";
+class ProdutoController
+{
+    public function findAll()
+    {
+
         $conexao = Conexao::getInstance();
 
         $stmt = $conexao->prepare("SELECT * FROM produto");
@@ -13,21 +15,21 @@ class ProdutoController {
         $stmt->execute();
         $produtos = array();
 
-        while ($produto = $stmt->fetch(PDO::FETCH_ASSOC)){
+        while ($produto = $stmt->fetch(PDO::FETCH_ASSOC)) {
             // Buscar Categoria da Composição
-                $categoriaController = new CategoriaController();
-                $categoria = $categoriaController->findById($produto["id_categoria"]);
+            $categoriaController = new CategoriaController();
+            $categoria = $categoriaController->findById($produto["id_categoria"]);
             // Buscar Marca da Composição
-                $marcaController = new MarcaController();
-                $marca = $marcaController->findById($produto["id_marca"]);
+            $marcaController = new MarcaController();
+            $marca = $marcaController->findById($produto["id_marca"]);
             $produtos[] = new Produto($produto["id"], $produto["nome"], $produto["percentual_lucro"], $categoria, $marca);
         }
         // $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return $produtos;
-        
     }
-    public function save(Produto $produto){
+    public function save(Produto $produto)
+    {
         try {
             $conexao = Conexao::getInstance();
 
@@ -43,12 +45,13 @@ class ProdutoController {
             $produto->setId($conexao->lastInsertId());
 
             return $produto;
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             echo "Erro ao inserir o produto: " . $e->getMessage();
         }
     }
 
-    public function update(Produto $produto){
+    public function update(Produto $produto)
+    {
         try {
             $conexao = Conexao::getInstance();
 
@@ -61,28 +64,38 @@ class ProdutoController {
             $stmt->bindParam(":id", $produto->getId());
 
             $stmt->execute();
-            
+
             return $this->findById($produto->getId());
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             echo "Erro ao atualizar o produto: " . $e->getMessage();
         }
     }
-    public function delete(Produto $produto){
+    public function delete($id)
+    {
         try {
             $conexao = Conexao::getInstance();
 
-            $stmt = $conexao->prepare("DELETE FROM produto WHERE id = :id");
+            // Excluir os produtos relacionados -> Faz o efeito cascata para não dar erro de chave estrangeira
 
-            $stmt->bindParam(":id", $produto->getId());
+            // Excluir a marca
+            $stmtProduto = $conexao->prepare("DELETE FROM produto WHERE id = :id");
+            $stmtProduto->bindParam(":id", $id);
+            $stmtProduto->execute();
 
-            $stmt->execute();
-
-            return $produto;
-        } catch(PDOException $e) {
-            echo "Erro ao excluir o produto: " . $e->getMessage();
+            if ($stmtProduto->rowCount() > 0) {
+                $_SESSION['mensagem'] = 'Produto excluído com sucesso!';
+                return true;
+            } else {
+                $_SESSION['mensagem'] = 'O produto não foi encontrada.';
+                return false;
+            }
+        } catch (PDOException $e) {
+            $_SESSION['mensagem'] = 'Erro ao excluir o produto: ' . $e->getMessage();
+            return false;
         }
     }
-    public function findById($id){
+    public function findById($id)
+    {
         try {
             $conexao = Conexao::getInstance();
 
@@ -92,10 +105,17 @@ class ProdutoController {
 
             $stmt->execute();
 
-            $produto = $stmt->fetchObject("Produto");
+            $produto = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            return $produto;
-        } catch(PDOException $e) {
+            // Buscar Categoria da Composição
+            $categoriaController = new CategoriaController();
+            $categoria = $categoriaController->findById($produto["id_categoria"]);
+            // Buscar Marca da Composição
+            $marcaController = new MarcaController();
+            $marca = $marcaController->findById($produto["id_marca"]);
+
+            return new Produto($produto["id"], $produto["nome"], $produto["percentual_lucro"], $categoria, $marca);
+        } catch (PDOException $e) {
             echo "Erro ao buscar o produto: " . $e->getMessage();
         }
     }

@@ -1,7 +1,12 @@
 <?php
-class MarcaController {
-    public function findAll(){
-        
+require_once "models/Conexao.php";
+require_once "models/Marca.php";
+
+
+class MarcaController
+{
+    public function findAll()
+    {
         $conexao = Conexao::getInstance();
 
         $stmt = $conexao->prepare("SELECT * FROM marca");
@@ -9,34 +14,70 @@ class MarcaController {
         $stmt->execute();
         $marcas = array();
 
-        while ($marca = $stmt->fetch(PDO::FETCH_ASSOC)){
+        while ($marca = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $marcas[] = new Marca($marca["id"], $marca["nome"]);
         }
 
         return $marcas;
     }
-    public function save(Marca $marca){
+    public function save(Marca $marca)
+    {
+        $conexao = Conexao::getInstance();
+
+        $stmt = $conexao->prepare("INSERT INTO marca (nome) VALUES (:nome)");
+
+        $stmt->bindParam(":nome", $marca->getNome());
+
+        $stmt->execute();
+
+        $marca = $this->findById($conexao->lastInsertId());
+
+        return $marca;
+    }
+    public function update(Marca $marca) {
         try {
             $conexao = Conexao::getInstance();
 
-            $stmt = $conexao->prepare("INSERT INTO marca (nome) VALUE (:nome)");
+            $stmt = $conexao->prepare("UPDATE marca SET nome = :nome WHERE id = :id");
 
             $stmt->bindParam(":nome", $marca->getNome());
+            $stmt->bindParam(":id", $marca->getId());
 
             $stmt->execute();
 
-            $marca->setId($conexao->lastInsertId());
-
-            return $marca;
-        } catch(PDOException $e) {
-            echo "Erro ao inserir a marca: " . $e->getMessage();
+            return $this->findById($marca->getId());
+        } catch (PDOException $e) {
+            echo "Erro ao atualizar o marca: " . $e->getMessage();
         }
     }
-    public function update(Marca $marca){
+    public function delete($id) {
+        try {
+            $conexao = Conexao::getInstance();
+
+            // Excluir os produtos relacionados -> Faz o efeito cascata para não dar erro de chave estrangeira
+            $stmtProdutos = $conexao->prepare("DELETE FROM produto WHERE id_marca = :id");
+            $stmtProdutos->bindParam(":id", $id);
+            $stmtProdutos->execute();
+
+            // Excluir a marca
+            $stmtMarca = $conexao->prepare("DELETE FROM marca WHERE id = :id");
+            $stmtMarca->bindParam(":id", $id);
+            $stmtMarca->execute();
+
+            if ($stmtMarca->rowCount() > 0) {
+                $_SESSION['mensagem'] = 'Marca excluída com sucesso!';
+                return true;
+            } else {
+                $_SESSION['mensagem'] = 'A marca não foi encontrada.';
+                return false;
+            }
+        } catch (PDOException $e) {
+            $_SESSION['mensagem'] = 'Erro ao excluir a marca: ' . $e->getMessage();
+            return false;
+        }
     }
-    public function delete(Marca $marca){
-    }
-    public function findById($id){
+    public function findById($id)
+    {
         try {
             $conexao = Conexao::getInstance();
 
@@ -51,7 +92,7 @@ class MarcaController {
             $marca = new Marca($resultado["id"], $resultado["nome"]);
 
             return $marca;
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             echo "Erro ao buscar a marca: " . $e->getMessage();
         }
     }

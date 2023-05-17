@@ -1,30 +1,41 @@
-<?php 
-    $controller = new MarcaController();
-    $marcas = $controller->findAll();
+<?php
+require_once "controllers/MarcaController.php";
+
+$controller = new MarcaController();
+$marcas = $controller->findAll();
+
+// Verificar se existe uma mensagem definida na sessão
+if (isset($_SESSION['mensagem'])) {
+    echo "<script>alert('" . $_SESSION['mensagem'] . "')</script>";
+    unset($_SESSION['mensagem']); // Limpar a variável de sessão após exibir o alerta
+}
 ?>
 
 <div class="container mt-5">
     <div class="row">
         <div class="col">
-            <h1 class="text-center mb-5">Lista de Marcas</h1>
+            <div class="d-flex justify-content-between mb-3">
+                <h1 class="text-center mb-0">Lista de Marcas</h1>
+                <a href="?pg=form_marca" class="btn btn-success" role="button">Cadastrar</a>
+            </div>
             <table class="table">
-                <a href="?pg=cadastroMarca" class="btn btn-success text-end">Cadastrar</a>
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Nome</th>
-                        <th class="text-end">Ações</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($marcas as $marca): ?>
+                    <?php foreach ($marcas as $marca) : ?>
                         <tr>
                             <td><?php echo htmlspecialchars($marca->getId()); ?></td>
                             <td><?php echo htmlspecialchars($marca->getNome()); ?></td>
-                            <td class="text-end">
-                                <a href="" class="btn btn-primary text-end">Detalhes</a>
-                                <a href="" class="btn btn-warning text-end">Editar</a>
-                                <a href="" class="btn btn-danger text-end">Excluir</a>
+                            <td>
+                                <a class="" href="?pg=form_marca&id=<?php echo $marca->getId(); ?>">
+                                    <i class="fas fa-eye"></i></a>
+                                <a class="" href="?pg=delete_marca&id=<?php echo $marca->getId(); ?>" onclick="return confirm('Tem certeza que deseja excluir esta marca?')">
+                                    <i class="fas fa-trash-alt"></i></a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -33,4 +44,3 @@
         </div>
     </div>
 </div>
- 
