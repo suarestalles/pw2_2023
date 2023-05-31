@@ -1,0 +1,66 @@
+/*@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+body {
+    background: linear-gradient(180deg, #fff, #ddd, #00cddb);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.formulario {
+    color: #333;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    padding: 3em;
+    border-radius: 25px;
+    background: transparent;
+    transition: all .5s;
+}
+
+.formulario:hover {
+    background: #00cddb;
+    color: #ddd;
+}
+
+h1 {
+    text-shadow: -2px 2px 5px #000;
+    font-size: 3rem;
+}
+
+form input {
+    width: 100%;
+    margin: 1em 0;
+    padding: 15px;
+    border-radius: 5px;
+    border: none;
+    font-size: 18px;
+}
+
+form input {
+    outline: 1px solid transparent;
+    transition: all .3s;
+}
+
+form input:focus {
+    outline: 1px solid #000;
+}
+
+form input[type="submit"] {
+    background: black;
+    color: #fff;
+    cursor: pointer;
+    transition: background .5s;
+    font-weight: bold;
+    outline: none;
+}
+form input[type="submit"]:hover, form input[type="submit"]:focus {
+    background: #08a73d;
+}

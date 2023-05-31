@@ -1,4 +1,7 @@
 <?php
+
+include_once("restrict.php");
+
   if (
     isset($_POST["nome"])
   ) {
