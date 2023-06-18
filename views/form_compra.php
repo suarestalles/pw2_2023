@@ -1,78 +1,119 @@
 <?php
-require_once "controllers/ProdutoController.php";
 include_once("restrict.php");
+require_once "controllers/CompraController.php";
+require_once "controllers/ProdutoController.php";
+require_once "controllers/ProdutoCompraController.php";
+require_once "models/ProdutoCompra.php";
+require_once "models/Produto.php";
 
-if (isset($_GET["id"])) {
+
+if (isset($_POST["finalizarCompra"])) {
+	unset($_SESSION["compra_id"]);
+	header("Location: ?pg=compras");
+	exit();
+}
+
+// if (!isset($_SESSION['compra_id'])) {
+// 	$compraController = new CompraController();
+// 	$compra = new Compra(null, null);
+// 	$compra = $compraController->save();
+// 	$_SESSION['compra_id'] = $compra->getId();
+// }
+
+$produtoCompraController = new ProdutoCompraController();
+
+if (isset($_POST['adicionarProduto'])) {
+	$produtoController = new ProdutoController();
 	$compraController = new CompraController();
-	$compra = $compraController->findById($_GET["id"]);
+	$usuarioController = new UsuarioController();
+	// Dados do formulário
+	$usuario = $usuarioController->findById($_SESSION['id_usuario']);
+	$produto = $produtoController->findById($_POST['produto']);
+	$compra = $compraController->findById($_SESSION["compra_id"]);
+	$quantidade = $_POST['qtde'];
+	$precoCusto = $_POST['preco_custo'];
+
+	// Criar uma nova instância de ProdutoCompra
+	$produtoCompra = new ProdutoCompra(null, $precoCusto, $quantidade, $produto, $compra, $usuario);
+
+	$produtoCompraController->save($produtoCompra);
 }
 
-// Salva quando recebe dados do formulário
-if (
-	isset($_POST["addProdutoCompra"])
-) {
-	$produtoCompra = new ProdutoCompra($_POST["usuario"], $_POST["produto"], $_POST["compra"], $_POST["qtde"], $_POST["preco_custo"]);
-}
+$produtosCompra = $produtoCompraController->findAll($_SESSION["compra_id"]);
 
 ?>
 
-<form class="form-horizontal">
-<fieldset>
 
-<!-- Form Name -->
-<legend>Form Name</legend>
 
-<!-- Button Drop Down -->
-<div class="form-group">
-  <label class="col-md-4 control-label" for="buttondropdown">Produto</label>
-  <div class="col-md-4">
-    <div class="input-group">
-      <input id="buttondropdown" name="buttondropdown" class="form-control" placeholder="Selecione o Produto" type="text" required="">
-      <div class="input-group-btn">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          +
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu pull-right">
-        </ul>
-      </div>
-    </div>
-  </div>
+<div class="container mt-2">
+	<h1 class="text-center mb-0">Cadastro de Compra</h1>
+	<br>
+	<form method="POST">
+		<div class="form-row">
+			<div class="form-group col-md-3">
+				<label for="produto">Produto</label>
+				<select class="form-control" id="produto" name="produto" required>
+					<?php
+					$produtoController = new ProdutoController();
+					$produtos = $produtoController->findAll();
+					foreach ($produtos as $produto) :
+						echo "<option value=" . $produto->getId() . ">" . $produto->getNome() . "</option>";
+					endforeach;
+					?>
+				</select>
+			</div>
+
+			<div class="form-group col-md-3">
+				<label for="qtde">Quantidade</label>
+				<input type="text" class="form-control" id="qtde" name="qtde" required>
+			</div>
+
+			<div class="form-group col-md-3">
+				<label for="preco_custo">Preço de Custo</label>
+				<input type="text" class="form-control" id="preco_custo" name="preco_custo" required>
+			</div>
+			<div class="form-group col-md-3 align-self-end">
+				<input type="submit" class="btn btn-primary" id="salvar" name="adicionarProduto" value="Adicionar Produto">
+			</div>
+
+		</div>
+	</form>
+	<form method="POST">
+		<input type="submit" class="btn btn-success" id="finalizar" name="finalizarCompra" value="Finalizar Compra">
+	</form>
 </div>
 
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-4 control-label" for="qtde">Quantidade</label>  
-  <div class="col-md-4">
-  <input id="qtde" name="qtde" type="text" placeholder="" class="form-control input-md" required="">
-    
-  </div>
+<div class="container mt-5">
+	<div class="row">
+		<div class="col">
+			<div class="d-flex justify-content-between mb-3">
+				<h3 class="text-center mb-0">Lista de Produtos</h3>
+			</div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Produto</th>
+						<th>Qtde</th>
+						<th>Preço de Custo</th>
+						<th>Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ($produtosCompra as $key => $produtoCompra) : ?>
+						<tr>
+							<td><?php echo htmlspecialchars($produtoCompra->getId()); ?></td>
+							<td><?php echo htmlspecialchars($produtoCompra->getProduto()->getNome()); ?></td>
+							<td><?php echo number_format($produtoCompra->getQtde(), 2, ',', '.'); ?></td>
+							<td><?php echo "R\$ " . number_format($produtoCompra->getPrecoCusto(), 2, ',', '.'); ?></td>
+							<td>
+								<a class="" href="?pg=delete_produto_compra&id=<?php echo $produtoCompra->getId(); ?>" onclick="return confirm('Tem certeza que deseja excluir este produto?')">
+									<i class="fas fa-trash-alt"></i></a>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
-
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-4 control-label" for="preco_custo">Preço de Custo</label>  
-  <div class="col-md-4">
-  <input id="preco_custo" name="preco_custo" type="text" placeholder="" class="form-control input-md" required="">
-    
-  </div>
-</div>
-
-<!-- Button -->
-<div class="form-group">
-  <label class="col-md-4 control-label" for="addProdutoCompra"></label>
-  <div class="col-md-4">
-    <button id="addProdutoCompra" name="addProdutoCompra" class="btn btn-primary">Add Produto</button>
-  </div>
-</div>
-
-<!-- Button -->
-<div class="form-group">
-  <label class="col-md-4 control-label" for=""></label>
-  <div class="col-md-4">
-    <button id="" name="" class="btn btn-success">Finalizar Compra</button>
-  </div>
-</div>
-
-</fieldset>
-</form>

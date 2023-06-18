@@ -1,13 +1,12 @@
 <?php
+require_once "models\Usuario.php";
 
 class Compra
 {
     private $id;
     private $dt_hora;
 
-    //private $produtos = array();
-
-    public function __construct($id, $dt_hora, $produtos)
+    public function __construct($id, $dt_hora)
     {
         $this->id = $id;
         $this->dt_hora = $dt_hora;
@@ -24,17 +23,24 @@ class Compra
         return $this;
     }
 
+
+    /**
+     * Get the value of id
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */
     public function setId($id)
     {
         $this->id = $id;
 
         return $this;
     }
-
-    
 }

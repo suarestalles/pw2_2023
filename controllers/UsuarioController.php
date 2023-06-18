@@ -22,6 +22,7 @@ class UsuarioController
                 $usuario = new Usuario($resultado["id"], $resultado["nome"], $resultado["login"], $resultado["senha"]);
 
                 if (Bcrypt::check($senha, $usuario->getSenha())) {
+                    $_SESSION["id_usuario"] = $usuario->getId();
                     $_SESSION["login"] = $usuario->getLogin();
                     $_SESSION["nome"] = $usuario->getNome();
                     header("Location: ../index.php");
@@ -40,6 +41,7 @@ class UsuarioController
     public function logout()
     {
         session_start();
+        unset($_SESSION["id_usuario"]);
         unset($_SESSION["login"]);
         unset($_SESSION["nome"]);
         header("form-login.php");
