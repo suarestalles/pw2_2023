@@ -1,5 +1,5 @@
 <?php
-require "models/Venda.php";
+require_once "models/Venda.php";
 require_once "models/Conexao.php";
 
 class VendaController {

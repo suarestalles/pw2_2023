@@ -10,6 +10,8 @@ if (isset($_SESSION['mensagem'])) {
     echo "<script>alert('" . $_SESSION['mensagem'] . "')</script>";
     unset($_SESSION['mensagem']); // Limpar a variável de sessão após exibir o alerta
 }
+
+unset($_SESSION["compra_id"]);
 ?>
 
 <div class="container mt-5">

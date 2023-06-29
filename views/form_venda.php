@@ -6,6 +6,10 @@ require_once "controllers/ProdutoVendaController.php";
 require_once "models/ProdutoVenda.php";
 require_once "models/Produto.php";
 
+if (isset($_SESSION['mensagem'])) {
+	echo "<script>alert('" . $_SESSION['mensagem'] . "')</script>";
+	unset($_SESSION['mensagem']); // Limpar a variável de sessão após exibir o alerta
+}
 
 if (isset($_POST["finalizarVenda"])) {
 	unset($_SESSION["venda_id"]);
@@ -13,12 +17,14 @@ if (isset($_POST["finalizarVenda"])) {
 	exit();
 }
 
-// if (!isset($_SESSION['venda_id'])) {
-// 	$vendaController = new VendaController();
-// 	$venda = new Venda(null, null);
-// 	$venda = $vendaController->save();
-// 	$_SESSION['venda_id'] = $venda->getId();
-// }
+if (isset($_GET['id'])) {
+	$_SESSION['venda_id'] = $_GET['id'];
+} else {
+	$vendaController = new VendaController();
+	$venda = new Venda(null, null);
+	$venda = $vendaController->save();
+	$_SESSION['venda_id'] = $venda->getId();
+}
 
 
 $produtoVendaController = new ProdutoVendaController();
@@ -46,6 +52,7 @@ $produtosVenda = $produtoVendaController->findAll($_SESSION["venda_id"]);
 ?>
 
 <div class="container mt-2">
+	<?php echo $_SESSION["venda_id"] ?>
 	<h1 class="text-center mb-0">Cadastro de Venda</h1>
 	<br>
 	<form method="POST">

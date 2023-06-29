@@ -5,7 +5,7 @@ require_once "models/Conexao.php";
 
 class ProdutoVendaController {
     
-    public function findAll() {
+    public function findAll($id_venda) {
         $conexao = Conexao::getInstance();
 
         $stmt = $conexao->prepare("SELECT * FROM produto_venda where id_venda = :id_venda");

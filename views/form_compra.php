@@ -6,6 +6,10 @@ require_once "controllers/ProdutoCompraController.php";
 require_once "models/ProdutoCompra.php";
 require_once "models/Produto.php";
 
+if (isset($_SESSION['mensagem'])) {
+	echo "<script>alert('" . $_SESSION['mensagem'] . "')</script>";
+	unset($_SESSION['mensagem']); // Limpar a variável de sessão após exibir o alerta
+}
 
 if (isset($_POST["finalizarCompra"])) {
 	unset($_SESSION["compra_id"]);
@@ -13,16 +17,19 @@ if (isset($_POST["finalizarCompra"])) {
 	exit();
 }
 
-// if (!isset($_SESSION['compra_id'])) {
-// 	$compraController = new CompraController();
-// 	$compra = new Compra(null, null);
-// 	$compra = $compraController->save();
-// 	$_SESSION['compra_id'] = $compra->getId();
-// }
+if (isset($_GET['id'])) {
+	$_SESSION['compra_id'] = $_GET['id'];
+} else {
+	$compraController = new CompraController();
+	$compra = new Compra(null, null);
+	$compra = $compraController->save();
+	$_SESSION['compra_id'] = $compra->getId();
+}
 
 $produtoCompraController = new ProdutoCompraController();
 
 if (isset($_POST['adicionarProduto'])) {
+	
 	$produtoController = new ProdutoController();
 	$compraController = new CompraController();
 	$usuarioController = new UsuarioController();
@@ -42,8 +49,6 @@ if (isset($_POST['adicionarProduto'])) {
 $produtosCompra = $produtoCompraController->findAll($_SESSION["compra_id"]);
 
 ?>
-
-
 
 <div class="container mt-2">
 	<h1 class="text-center mb-0">Cadastro de Compra</h1>
