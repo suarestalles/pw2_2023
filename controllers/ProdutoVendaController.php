@@ -77,7 +77,7 @@ class ProdutoVendaController {
         }
     }
 
-    public function delete(ProdutoVenda $produtoVenda) {
+    public function delete($id) {
         try {
             $conexao = Conexao::getInstance();
 

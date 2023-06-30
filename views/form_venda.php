@@ -52,7 +52,6 @@ $produtosVenda = $produtoVendaController->findAll($_SESSION["venda_id"]);
 ?>
 
 <div class="container mt-2">
-	<?php echo $_SESSION["venda_id"] ?>
 	<h1 class="text-center mb-0">Cadastro de Venda</h1>
 	<br>
 	<form method="POST">
